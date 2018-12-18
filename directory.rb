@@ -37,14 +37,21 @@ end
 =end
 
 def input_students
-  puts "Please enter the names of the students"
-  puts "To finish, just hit return twice"
+  puts "Please enter the names & details of the students"
+  puts "To finish, hit enter twice"
   students = []
-  name = gets.chomp
-  while !name.empty? do
-    students << {name: name, cohort: :November, country_of_birth: :Latvia}
-    puts "Now we have #{students.count} students"
+  name = "temp"
+  cohort = "temp"
+  country = "temp"
+  while (!name.empty? && !cohort.empty?) do
+    puts "Name:"
     name = gets.chomp
+    puts "Cohort:"
+    cohort = gets.chomp
+    puts "Country:"
+    country = gets.chomp
+    students << {name: name, cohort: cohort, country_of_birth: country}
+    puts "Now we have #{students.count} students"
   end
   students
 end
