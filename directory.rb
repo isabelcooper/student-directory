@@ -12,24 +12,24 @@ def print(names)
   end
 end
 
-#def list_cohorts(students)
+def list_cohorts(students)
 #  students.group_by{ |cohort| cohort[students[:cohort]] }
-
-#  by_cohort = {}
-#  students.map do |student|
-#    if student[:cohort] == by_cohort[:cohort]
-#      by_cohort[:student] = [student[:name], student[:country_of_birth]]]
-#        row << {name: student[:name], country_of_birth: student[:country]}
-#      else
-#        by_cohort = {
-#          :cohort => student[:cohort],
-#          :student => [student[:name], student[:country_of_birth]]
-#        }
-#    else by_cohort << {cohort: student[:cohort], name: student[:name], country_of_birth: student[:country]}
-#      end
-#    end
-#  end
-#end
+  by_cohort = {}
+  list =[]
+  students.map do |student|
+    list.select {|cohort_name| student[:cohort] != cohort_name}
+      by_cohort = {
+        :cohort => student[:cohort],
+        :student => [student[:name], student[:country_of_birth]]
+      }
+    end
+    list.select {|cohort_name| student[:cohort] == cohort_name}
+      by_cohort[:student] = [student[:name], student[:country_of_birth]]]
+        row << {name: student[:name], country_of_birth: student[:country]}
+      end
+    end
+  end
+end
 
 def print_by_cohort(names)
   puts "Select cohort"
@@ -122,8 +122,8 @@ students = input_students
 #students_by_cohort = regroup(students, :cohort, :name)
 print_header
 puts students
-#test = list_cohorts(students)
-#puts test
+test = list_cohorts(students)
+puts test
 #print_by_cohort(students_by_cohort)
 
 #letter = input_letter
