@@ -1,20 +1,3 @@
-=begin
-
-students = [
-  {name: "Dr. Hannibal Lecter", cohort: :november } ,
-  {name: "Darth Vader", cohort: :november } ,
-  {name: "Nurse Ratched", cohort: :november } ,
-  {name: "Michael Corleone", cohort: :november } ,
-  {name: "Alex DeLarge", cohort: :november } ,
-  {name: "The Wicked Witch of the West", cohort: :november } ,
-  {name: "Terminator", cohort: :november } ,
-  {name: "Freddy Krueger", cohort: :november } ,
-  {name: "The Joker", cohort: :november } ,
-  {name: "Joffrey Baratheon", cohort: :november } ,
-  {name: "Norman Bates", cohort: :november }
-]
-=end
-#print list of students
 def print_header
   puts "The students of Villains Academy"
   puts "-------------"
@@ -23,6 +6,14 @@ end
 def print(names)
   names.each_with_index do |name, index|
     puts (index + 1).to_s + ". #{name[:name]} (#{name[:cohort]} cohort)"
+  end
+end
+
+def print_by_letter (names, letter)
+  names.each_with_index do |name, index|
+    if name[:name].start_with?(letter)
+      puts (index + 1).to_s + ". #{name[:name]} (#{name[:cohort]} cohort)"
+    end
   end
 end
 
@@ -43,7 +34,15 @@ def input_students
   students
 end
 
+def input_letter
+  puts "select the initial letter you'd like to return"
+  letter = gets.chomp
+  letter
+end
+
+
 students = input_students
 print_header
-print(students)
+letter = input_letter
+print_by_letter(students, letter)
 print_footer(students)
