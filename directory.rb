@@ -17,6 +17,14 @@ def print_by_letter (names, letter)
   end
 end
 
+def print_by_length (names)
+  names.each_with_index do |name, index|
+    if name[:name].length < 12
+      puts (index + 1).to_s + ". #{name[:name]} (#{name[:cohort]} cohort)"
+    end
+  end
+end
+
 def print_footer(names)
   puts "Overall we have #{names.count} great students"
 end
@@ -43,6 +51,7 @@ end
 
 students = input_students
 print_header
-letter = input_letter
-print_by_letter(students, letter)
+print_by_length(students)
+#letter = input_letter
+#print_by_letter(students, letter)
 print_footer(students)
