@@ -12,6 +12,57 @@ def print(names)
   end
 end
 
+#def list_cohorts(students)
+#  students.group_by{ |cohort| cohort[students[:cohort]] }
+
+#  by_cohort = {}
+#  students.map do |student|
+#    if student[:cohort] == by_cohort[:cohort]
+#      by_cohort[:student] = [student[:name], student[:country_of_birth]]]
+#        row << {name: student[:name], country_of_birth: student[:country]}
+#      else
+#        by_cohort = {
+#          :cohort => student[:cohort],
+#          :student => [student[:name], student[:country_of_birth]]
+#        }
+#    else by_cohort << {cohort: student[:cohort], name: student[:name], country_of_birth: student[:country]}
+#      end
+#    end
+#  end
+#end
+
+def print_by_cohort(names)
+  puts "Select cohort"
+  search_cohort = gets.chomp.downcase
+end
+
+def regroup(students, by, at)
+  regroup = students.group_by {|namehash| namehash[by] }.map { |k,v| [ k, v.map { |h|h[at]} ] }.to_h
+end
+
+def print_by_cohort(names)
+  linewidth = 30
+  names.each_with_index do |name, index|
+    left = (index + 1).to_s + ". #{name[:name]}"
+    right = "(#{name[:cohort]} cohort, born in #{name[:country_of_birth]})"
+    puts left.ljust(linewidth) + right.rjust(linewidth)
+  end
+end
+
+=begin
+def group(list, by, at)
+  list.group_by { |h| h[by] }.map { |k,v| [ k , v.map {|h| h[at]} ] }.to_h
+end
+
+sample =[
+  {:type=>"Meat",  :name=>"one",  :size=>"big"   },
+  {:type=>"Meat",  :name=>"two",  :size=>"small" },
+  {:type=>"Fruit", :name=>"four", :size=>"small" }
+]
+
+group(sample, :type, :name) # => {"Meat"=>["one", "two"], "Fruit"=>["four"]}
+group(sample, :size, :name) # => {"big"=>["one"], "small"=>["two", "four"]}
+=end
 =begin
 def print_by_letter (names, letter)
   names.each_with_index do |name, index|
@@ -35,36 +86,57 @@ def input_letter
   letter
 end
 =end
-
 def input_students
-  puts "Please enter the names & details of the students"
+  puts "Enter the names & details of the students"
   puts "To finish, hit enter twice"
   students = []
   name = "temp"
   cohort = "temp"
   country = "temp"
-  while (!name.empty? && !cohort.empty?) do
+  while !name.empty? do
     puts "Name:"
-    name = gets.chomp
+    name = gets.tr("\n", "")
+    puts name
     puts "Cohort:"
-    cohort = gets.chomp
+    cohort = gets.tr("\n", "")
     puts "Country:"
-    country = gets.chomp
+    country = gets.tr("\n", "")
     students << {name: name, cohort: cohort, country_of_birth: country}
     puts "Now we have #{students.count} students"
+    break if ( country.empty? || cohort.empty? )
   end
   students
 end
 
 
+
 def print_footer(names)
-  puts "Overall we have #{names.count} great students"
+  if names.count > 1
+    puts "Overall we have #{names.count} great students"
+  else
+    puts "Overall we have #{names.count} great student"
+  end
 end
 
 students = input_students
+#students_by_cohort = regroup(students, :cohort, :name)
 print_header
-print(students)
+puts students
+#test = list_cohorts(students)
+#puts test
+#print_by_cohort(students_by_cohort)
+
 #letter = input_letter
 #print_by_letter(students, letter)
 #print_by_length(students)
 print_footer(students)
+
+ #print them grouped by cohorts.
+ #To do this, you'll need to get a list of all existing cohorts
+ #(the map() method may be useful but it's not the only option),
+ # iterate over it and only print the students from that cohort.
+
+
+ #1. print list of cohorts. select which, print whats within that.
+ #2. if cohort appears empty, add unknown
+ #2. main menu for selecting move?
