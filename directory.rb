@@ -4,11 +4,15 @@ def print_header
 end
 
 def print(names)
+  linewidth = 30
   names.each_with_index do |name, index|
-    puts (index + 1).to_s + ". #{name[:name]} (#{name[:cohort]} cohort)"
+    left = (index + 1).to_s + ". #{name[:name]}"
+    right = "(#{name[:cohort]} cohort, born in #{name[:country_of_birth]})"
+    puts left.ljust(linewidth) + right.rjust(linewidth)
   end
 end
 
+=begin
 def print_by_letter (names, letter)
   names.each_with_index do |name, index|
     if name[:name].start_with?(letter)
@@ -25,9 +29,12 @@ def print_by_length (names)
   end
 end
 
-def print_footer(names)
-  puts "Overall we have #{names.count} great students"
+def input_letter
+  puts "select the initial letter you'd like to return"
+  letter = gets.chomp
+  letter
 end
+=end
 
 def input_students
   puts "Please enter the names of the students"
@@ -35,23 +42,22 @@ def input_students
   students = []
   name = gets.chomp
   while !name.empty? do
-    students << {name: name, cohort: :november}
+    students << {name: name, cohort: :November, country_of_birth: :Latvia}
     puts "Now we have #{students.count} students"
     name = gets.chomp
   end
   students
 end
 
-def input_letter
-  puts "select the initial letter you'd like to return"
-  letter = gets.chomp
-  letter
-end
 
+def print_footer(names)
+  puts "Overall we have #{names.count} great students"
+end
 
 students = input_students
 print_header
-print_by_length(students)
+print(students)
 #letter = input_letter
 #print_by_letter(students, letter)
+#print_by_length(students)
 print_footer(students)
