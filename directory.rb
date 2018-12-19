@@ -20,13 +20,16 @@ def process
   case selection.to_i
   when 1
     input_students
+    puts "Got them - don't forget to save to file if permanent version needed"
   when 2
     show_students
   when 3
     save_students
+    puts "Students saved to file"
   when 4
     load_students
   when 9
+    puts "Exiting program"
     exit
   else
     puts "Sorry, I don't recognise that option, please try again"
