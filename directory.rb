@@ -78,7 +78,7 @@ def input_students
     cohort = STDIN.gets.tr("\n", "")
     puts "Country:"
     country = STDIN.gets.tr("\n", "")
-    @students << {name: name, cohort: cohort, country_of_birth: country}
+    add_students(name, cohort, country)
     puts "Now we have #{@students.count} students"
     break if ( country.empty? || cohort.empty? )
   end
@@ -110,9 +110,13 @@ def load_students(filename = "students.csv")
   file = File.open(filename, "r")
   file.readlines.each do |line|
   name, cohort, country_of_birth = line.chomp.split(",")
-    @students << {name: name, cohort: cohort.to_sym, country_of_birth: country_of_birth}
+    add_students(name, cohort.to_sym, country_of_birth)
   end
   file.close
+end
+
+def add_students(name, cohort, country_of_birth)
+  @students << {name: name, cohort: cohort, country_of_birth: country_of_birth}
 end
 
 try_load_students
