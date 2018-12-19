@@ -1,5 +1,13 @@
 @students = []
 
+def print_menu
+  puts "1. Input the students"
+  puts "2. Show the students"
+  puts "3. Save the list to students.csv"
+  puts "4. Load the list from students.csv"
+  puts "9. Exit"
+end
+
 def interactive_menu
   loop do
     print_menu
@@ -25,12 +33,17 @@ def process
   end
 end
 
-def print_menu
-  puts "1. Input the students"
-  puts "2. Show the students"
-  puts "3. Save the list to students.csv"
-  puts "4. Load the list from students.csv"
-  puts "9. Exit"
+def print_header
+  puts "The students of Villains Academy"
+  puts "-------------"
+end
+
+def print_footer
+  if @students.count != 1
+    puts "Overall we have #{@students.count} great students"
+  else
+    puts "Overall we have #{@students.count} great student"
+  end
 end
 
 def show_students
@@ -41,11 +54,6 @@ def show_students
   print_footer
 end
 
-def print_header
-  puts "The students of Villains Academy"
-  puts "-------------"
-end
-
 def print_students_list
   linewidth = 30
   @students.each_with_index do |student, index|
@@ -54,31 +62,6 @@ def print_students_list
     puts left.ljust(linewidth) + right.rjust(linewidth)
   end
 end
-
-=begin
-
-def print_by_length (names)
-  names.each_with_index do |name, index|
-    if name[:name].length < 12
-      puts (index + 1).to_s + ". #{name[:name]} (#{name[:cohort]} cohort)"
-    end
-  end
-end
-
-def print_by_letter (names, letter)
-  names.each_with_index do |name, index|
-    if name[:name].start_with?(letter)
-      puts (index + 1).to_s + ". #{name[:name]} (#{name[:cohort]} cohort)"
-    end
-  end
-end
-
-def input_letter
-  puts "select the initial letter you'd like to return"
-  letter = gets.chomp
-  letter
-end
-=end
 
 def input_students
   puts "Enter the names & details of the students"
@@ -102,9 +85,7 @@ def input_students
 end
 
 def save_students
-  #open the file in writing mode
   file = File.open("students.csv", "w")
-  #iterate over array of students
   @students.each do |student|
     student_data = [student[:name], student[:cohort], student[:country_of_birth]]
     csv_line = student_data.join(",")
@@ -114,7 +95,7 @@ def save_students
 end
 
 def try_load_students
-  filename = ARGV.first
+  filename = ARGV.first #first argument from the command line
   return if filename.nil?
   if File.exists?(filename)
     load_students(filename)
@@ -134,17 +115,5 @@ def load_students(filename = "students.csv")
   file.close
 end
 
-def print_footer
-  if @students.count != 1
-    puts "Overall we have #{@students.count} great students"
-  else
-    puts "Overall we have #{@students.count} great student"
-  end
-end
-
 try_load_students
 interactive_menu
-
-#letter = input_letter
-#print_by_letter(students, letter)
-#print_by_length(students)
