@@ -14,6 +14,8 @@ def process
     input_students
   when 2
     show_students
+  when 3
+    save_student
   when 9
     exit
   else
@@ -24,6 +26,7 @@ end
 def print_menu
   puts "1. Input the students"
   puts "2. Show the students"
+  puts "3. Save the list to students.csv"
   puts "9. Exit"
 end
 
@@ -93,6 +96,18 @@ def input_students
     puts "Now we have #{@students.count} students"
     break if ( country.empty? || cohort.empty? )
   end
+end
+
+def save_student
+  #open the file in writing mode
+  file = File.open("students.csv", "w")
+  #iterate over array of students
+  @students.each do |student|
+    student_data = [student[:name], student[:cohort], student[:country_of_birth]]
+    csv_line = student_data.join(",")
+    file.puts csv_line
+  end
+  file.close
 end
 
 def print_footer
