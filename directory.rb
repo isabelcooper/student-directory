@@ -8,7 +8,7 @@ def interactive_menu
 end
 
 def process
-  selection = gets.chomp
+  selection = STDIN.gets.chomp
   case selection.to_i
   when 1
     input_students
@@ -88,13 +88,13 @@ def input_students
   country = "temp"
   while !name.empty? do
     puts "Name:"
-    name = gets.tr("\n", "")
+    name = STDIN.gets.tr("\n", "")
     break if name.empty?
     puts name
     puts "Cohort:"
-    cohort = gets.tr("\n", "")
+    cohort = STDIN.gets.tr("\n", "")
     puts "Country:"
-    country = gets.tr("\n", "")
+    country = STDIN.gets.tr("\n", "")
     @students << {name: name, cohort: cohort, country_of_birth: country}
     puts "Now we have #{@students.count} students"
     break if ( country.empty? || cohort.empty? )
@@ -113,8 +113,20 @@ def save_students
   file.close
 end
 
-def load_students
-  file = File.open("students.csv", "r")
+def try_load_students
+  filename = ARGV.first
+  return if filename.nil?
+  if File.exists?(filename)
+    load_students(filename)
+    puts "Loaded #{@students.count} from #{filename}"
+  else
+    puts "Sorry, #{filename} doesn't exist"
+    exit
+  end
+end
+
+def load_students(filename = "students.csv")
+  file = File.open(filename, "r")
   file.readlines.each do |line|
   name, cohort, country_of_birth = line.chomp.split(",")
     @students << {name: name, cohort: cohort.to_sym, country_of_birth: country_of_birth}
@@ -130,6 +142,7 @@ def print_footer
   end
 end
 
+try_load_students
 interactive_menu
 
 #letter = input_letter
