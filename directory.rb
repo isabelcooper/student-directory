@@ -27,7 +27,7 @@ def process
     save_students
     puts "Students saved to file"
   when 4
-    load_students
+    load_students("")
   when 9
     puts "Exiting program"
     exit
@@ -88,13 +88,19 @@ def input_students
 end
 
 def save_students
-  file = File.open("students.csv", "w")
-  @students.each do |student|
-    student_data = [student[:name], student[:cohort], student[:country]]
-    csv_line = student_data.join(",")
-    file.puts csv_line
+  puts "Enter filename"
+  filename = STDIN.gets.chomp
+  if File.exists?(filename)
+    file = File.open(filename, "w")
+    @students.each do |student|
+      student_data = [student[:name], student[:cohort], student[:country]]
+      csv_line = student_data.join(",")
+      file.puts csv_line
+    end
+    file.close
+  else
+    puts "Filename not recognised"
   end
-  file.close
 end
 
 def pre_load_students
@@ -108,13 +114,22 @@ def pre_load_students
   end
 end
 
-def load_students(filename = "students.csv")
-  file = File.open(filename, "r")
-  file.readlines.each do |line|
-  name, cohort, country = line.chomp.split(",")
-    add_students_to_array(name, cohort.to_sym, country)
+def load_students(filename)
+  if filename.nil? || filename == ""
+    puts "Enter filename"
+    filename = STDIN.gets.chomp
   end
-  file.close
+  if File.exists?(filename)
+    file = File.open(filename, "r")
+    file.readlines.each do |line|
+      name, cohort, country = line.chomp.split(",")
+      add_students_to_array(name, cohort.to_sym, country)
+    end
+    puts "File loaded"
+    file.close
+  else
+    puts "Filename not recognised"
+  end
 end
 
 def add_students_to_array(name, cohort, country)
