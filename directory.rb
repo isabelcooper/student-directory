@@ -1,28 +1,38 @@
+@students = []
+
 def interactive_menu
-  students = []
   loop do
-    #give user options
-    puts "1. Input the students"
-    puts "2. Show the students"
-    puts "9. Exit"
-    #retrieve selection
-    selection = gets.chomp
-    #action
-    case selection.to_i
-    when 1
-      students = input_students
-    when 2
-      print_header
-      if students.count > 1
-        print(students)
-      end
-      print_footer(students)
-    when 9
-      exit
-    else
-      puts "Sorry, I don't recognise that option, please try again"
-    end
+    print_menu
+    process
   end
+end
+
+def process
+  selection = gets.chomp
+  case selection.to_i
+  when 1
+    input_students
+  when 2
+    show_students
+  when 9
+    exit
+  else
+    puts "Sorry, I don't recognise that option, please try again"
+  end
+end
+
+def print_menu
+  puts "1. Input the students"
+  puts "2. Show the students"
+  puts "9. Exit"
+end
+
+def show_students
+  print_header
+  if @students.count > 1
+    print_students_list
+  end
+  print_footer
 end
 
 def print_header
@@ -30,11 +40,11 @@ def print_header
   puts "-------------"
 end
 
-def print(names)
+def print_students_list
   linewidth = 30
-  names.each_with_index do |name, index|
-    left = (index + 1).to_s + ". #{name[:name]}"
-    right = "(#{name[:cohort]} cohort, born in #{name[:country_of_birth]})"
+  @students.each_with_index do |student, index|
+    left = (index + 1).to_s + ". #{student[:name]}"
+    right = "(#{student[:cohort]} cohort, born in #{student[:country_of_birth]})"
     puts left.ljust(linewidth) + right.rjust(linewidth)
   end
 end
@@ -67,7 +77,6 @@ end
 def input_students
   puts "Enter the names & details of the students"
   puts "To finish, hit enter twice"
-  students = []
   name = "temp"
   cohort = "temp"
   country = "temp"
@@ -80,18 +89,17 @@ def input_students
     cohort = gets.tr("\n", "")
     puts "Country:"
     country = gets.tr("\n", "")
-    students << {name: name, cohort: cohort, country_of_birth: country}
-    puts "Now we have #{students.count} students"
+    @students << {name: name, cohort: cohort, country_of_birth: country}
+    puts "Now we have #{@students.count} students"
     break if ( country.empty? || cohort.empty? )
   end
-  students
 end
 
-def print_footer(names)
-  if names.count != 1
-    puts "Overall we have #{names.count} great students"
+def print_footer
+  if @students.count != 1
+    puts "Overall we have #{@students.count} great students"
   else
-    puts "Overall we have #{names.count} great student"
+    puts "Overall we have #{@students.count} great student"
   end
 end
 
