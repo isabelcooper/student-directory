@@ -34,15 +34,15 @@ def process
 end
 
 def print_header
-  puts "The students of Villains Academy"
-  puts "-------------"
+  puts "The students of Villains Academy \n-------------"
 end
 
 def print_footer
+  summary = "Overall we have #{@students.count} great student"
   if @students.count != 1
-    puts "Overall we have #{@students.count} great students"
+    puts summary + "s"
   else
-    puts "Overall we have #{@students.count} great student"
+    puts summary
   end
 end
 
@@ -58,7 +58,7 @@ def print_students_list
   linewidth = 30
   @students.each_with_index do |student, index|
     left = (index + 1).to_s + ". #{student[:name]}"
-    right = "(#{student[:cohort]} cohort, born in #{student[:country_of_birth]})"
+    right = "(#{student[:cohort]} cohort, born in #{student[:country]})"
     puts left.ljust(linewidth) + right.rjust(linewidth)
   end
 end
@@ -78,7 +78,7 @@ def input_students
     cohort = STDIN.gets.tr("\n", "")
     puts "Country:"
     country = STDIN.gets.tr("\n", "")
-    add_students(name, cohort, country)
+    add_students_to_array(name, cohort, country)
     puts "Now we have #{@students.count} students"
     break if ( country.empty? || cohort.empty? )
   end
@@ -87,18 +87,15 @@ end
 def save_students
   file = File.open("students.csv", "w")
   @students.each do |student|
-    student_data = [student[:name], student[:cohort], student[:country_of_birth]]
+    student_data = [student[:name], student[:cohort], student[:country]]
     csv_line = student_data.join(",")
     file.puts csv_line
   end
   file.close
 end
 
-def try_load_students
-  filename = ARGV.first #first argument from the command line
-  if filename.nil?
-    filename = "students.csv"
-  end
+def pre_load_students
+  filename = ARGV.first || "students.csv"
   if File.exists?(filename)
     load_students(filename)
     puts "Loaded #{@students.count} from #{filename}"
@@ -111,15 +108,15 @@ end
 def load_students(filename = "students.csv")
   file = File.open(filename, "r")
   file.readlines.each do |line|
-  name, cohort, country_of_birth = line.chomp.split(",")
-    add_students(name, cohort.to_sym, country_of_birth)
+  name, cohort, country = line.chomp.split(",")
+    add_students_to_array(name, cohort.to_sym, country)
   end
   file.close
 end
 
-def add_students(name, cohort, country_of_birth)
-  @students << {name: name, cohort: cohort, country_of_birth: country_of_birth}
+def add_students_to_array(name, cohort, country)
+  @students << {name: name, cohort: cohort, country: country}
 end
 
-try_load_students
+pre_load_students
 interactive_menu
