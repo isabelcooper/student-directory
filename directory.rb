@@ -4,7 +4,7 @@ require 'csv'
 def print_menu
   menu = ["1. Input the students","2. Show the students",
   "3. Save the list to students.csv","4. Load the list from students.csv",
-  "9. Exit"]
+  "5. Print source code","9. Exit"]
   puts menu
 end
 
@@ -28,6 +28,8 @@ def process
     puts "Students saved to file"
   when 4
     load_students("")
+  when 5
+    print_source_code
   when 9
     puts "Exiting program"
     exit
@@ -133,6 +135,10 @@ end
 def enter_filename
   puts "Enter filename"
   STDIN.gets.chomp
+end
+
+def print_source_code
+  puts File.read(__FILE__)
 end
 
 pre_load_students
