@@ -1,3 +1,4 @@
+require 'csv'
 @students = []
 
 def print_menu
@@ -87,14 +88,11 @@ def input_students
 end
 
 def save_students
-  puts "Enter filename"
-  filename = STDIN.gets.chomp
+  filename = enter_filename
   if File.exists?(filename)
-    file = File.open(filename, "w") do
+    CSV.File.open(filename, "w") do |csv|
       @students.each do |student|
-        student_data = [student[:name], student[:cohort], student[:country]]
-        csv_line = student_data.join(",")
-        file.puts csv_line
+        csv << [student[:name], student[:cohort], student[:country]]
       end
     end
   else
@@ -115,17 +113,14 @@ end
 
 def load_students(filename)
   if filename.nil? || filename == ""
-    puts "Enter filename"
-    filename = STDIN.gets.chomp
+    filename = enter_filename
   end
   if File.exists?(filename)
-    file = File.open(filename, "r") do |openfile|
-      openfile.readlines.each do |line|
-        name, cohort, country = line.chomp.split(",")
+    CSV.foreach(filename) do |row|
+        name, cohort, country = row
         add_students_to_array(name, cohort.to_sym, country)
-      puts "File loaded"
       end
-    end
+    puts "File loaded"
   else
     puts "Filename not recognised"
   end
@@ -133,6 +128,11 @@ end
 
 def add_students_to_array(name, cohort, country)
   @students << {name: name, cohort: cohort, country: country}
+end
+
+def enter_filename
+  puts "Enter filename"
+  STDIN.gets.chomp
 end
 
 pre_load_students
