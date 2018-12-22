@@ -1,11 +1,10 @@
 @students = []
 
 def print_menu
-  puts "1. Input the students"
-  puts "2. Show the students"
-  puts "3. Save the list to students.csv"
-  puts "4. Load the list from students.csv"
-  puts "9. Exit"
+  menu = ["1. Input the students","2. Show the students",
+  "3. Save the list to students.csv","4. Load the list from students.csv",
+  "9. Exit"]
+  puts menu
 end
 
 def interactive_menu
@@ -78,7 +77,7 @@ def input_students
     break if name.empty?
     puts name
     puts "Cohort:"
-    cohort = STDIN.gets.tr("\n", "")
+    cohort = STDIN.gets.tr("\n", "").to_sym
     puts "Country:"
     country = STDIN.gets.tr("\n", "")
     add_students_to_array(name, cohort, country)
@@ -91,13 +90,13 @@ def save_students
   puts "Enter filename"
   filename = STDIN.gets.chomp
   if File.exists?(filename)
-    file = File.open(filename, "w")
-    @students.each do |student|
-      student_data = [student[:name], student[:cohort], student[:country]]
-      csv_line = student_data.join(",")
-      file.puts csv_line
+    file = File.open(filename, "w") do
+      @students.each do |student|
+        student_data = [student[:name], student[:cohort], student[:country]]
+        csv_line = student_data.join(",")
+        file.puts csv_line
+      end
     end
-    file.close
   else
     puts "Filename not recognised"
   end
@@ -120,13 +119,13 @@ def load_students(filename)
     filename = STDIN.gets.chomp
   end
   if File.exists?(filename)
-    file = File.open(filename, "r")
-    file.readlines.each do |line|
-      name, cohort, country = line.chomp.split(",")
-      add_students_to_array(name, cohort.to_sym, country)
+    file = File.open(filename, "r") do |openfile|
+      openfile.readlines.each do |line|
+        name, cohort, country = line.chomp.split(",")
+        add_students_to_array(name, cohort.to_sym, country)
+      puts "File loaded"
+      end
     end
-    puts "File loaded"
-    file.close
   else
     puts "Filename not recognised"
   end
